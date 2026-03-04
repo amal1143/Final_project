@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Delete Product</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background: #fdf6e3;
+            padding: 40px;
+        }
+        .box {
+            max-width: 400px;
+            margin: auto;
+            background: white;
+            padding: 30px;
+            border-radius: 16px;
+            box-shadow: 0 6px 14px rgba(0,0,0,0.12);
+            text-align: center;
+        }
+        button {
+            padding: 10px 24px;
+            border-radius: 10px;
+            border: none;
+            font-size: 16px;
+            cursor: pointer;
+            margin: 10px;
+        }
+        .delete {
+            background: #dc3545;
+            color: white;
+        }
+        .cancel {
+            background: #6c757d;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+
+<div class="box">
+    <h2>Delete Product</h2>
+    <p>Are you sure you want to delete:</p>
+    <strong>{{ product.product_name }}</strong>
+
+    <form method="POST">
+        {% csrf_token %}
+        <button type="submit" class="delete">Yes, Delete</button>
+        <a href="{% url 'my_products' %}">
+            <button type="button" class="cancel">Cancel</button>
+        </a>
+    </form>
+</div>
+
+</body>
+</html>
+

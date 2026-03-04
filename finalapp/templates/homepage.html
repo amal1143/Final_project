@@ -1,0 +1,223 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Farmers’ Market Availability System</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Segoe UI", Arial, sans-serif;
+        }
+
+        body {
+            color: #fff;
+        }
+
+        /* ===== NAVBAR ===== */
+        .navbar {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 16px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(0,0,0,0.55);
+            z-index: 100;
+        }
+
+        .logo {
+            font-size: 22px;
+            font-weight: 700;
+            letter-spacing: 1px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 24px;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: #fff;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            opacity: 0.9;
+        }
+
+        .nav-links a:hover {
+            opacity: 1;
+            text-decoration: underline;
+        }
+
+        .contact {
+            font-weight: 600;
+            color: #88f5a1;
+        }
+
+        /* ===== HERO ===== */
+        .hero {
+            min-height: 100vh;
+            background: 
+                linear-gradient(rgba(0,0,0,0.55), rgba(0,0,0,0.55)),
+                url("{% static 'images/farmers-hero.png' %}") center/cover no-repeat;
+            display: flex;
+            align-items: center;
+            padding: 120px 40px 60px;
+        }
+
+        .hero-content {
+            max-width: 650px;
+        }
+
+        .hero h1 {
+            font-size: 42px;
+            font-weight: 800;
+            margin-bottom: 20px;
+            line-height: 1.2;
+        }
+
+        .hero p {
+            font-size: 16px;
+            line-height: 1.7;
+            color: #e5e7eb;
+            margin-bottom: 30px;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 12px 22px;
+            border-radius: 6px;
+            font-weight: 600;
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        .btn-primary {
+            background: #80ea85;
+            color: #000;
+        }
+
+        .btn-primary:hover {
+            background: #80ea85;
+        }
+
+        .btn-outline {
+            border: 2px solid #fff;
+            color: #fff;
+        }
+
+        .btn-outline:hover {
+            background: #fff;
+            color: #000;
+        }
+
+        /* ===== INFO STRIP ===== */
+        .info {
+            background: #ffffff;
+            color: #1f2937;
+            padding: 60px 40px;
+        }
+
+        .info-grid {
+            max-width: 1200px;
+            margin: auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 30px;
+            text-align: center;
+        }
+
+        .info-box h3 {
+            color: #16a34a;
+            margin-bottom: 10px;
+            font-size: 18px;
+        }
+
+        .info-box p {
+            font-size: 14px;
+            color: #4b5563;
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 32px;
+            }
+
+            .navbar {
+                padding: 14px 20px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<!-- NAVBAR -->
+<div class="navbar">
+    <div class="logo">🌾 FARMERS MARKET</div>
+
+    <div class="nav-links">
+        <a href="#">Home</a>
+        <a href="{% url 'about' %}">About</a>
+        <span class="contact">📞 +91 98765 43210</span>
+        <a href="{% url 'login' %}">Login</a>
+        <a href="{% url 'register' %}">Register</a>
+    </div>
+</div>
+
+<!-- HERO SECTION -->
+<section class="hero">
+    <div class="hero-content">
+        <h1>
+            Empowering Farmers <br>
+            with Smart Market Availability
+        </h1>
+
+        <p>
+            A digital platform connecting farmers and customers through real-time
+            market availability, product listings, secure orders, and organized
+            pickup schedules. Farmers come first.
+        </p>
+
+        <div class="hero-buttons">
+            <a href="{% url 'register' %}" class="btn btn-primary">Farmer Registration</a>
+            <a href="{% url 'login' %}" class="btn btn-outline">Login</a>
+        </div>
+    </div>
+</section>
+
+<!-- INFO SECTION -->
+<section class="info">
+    <div class="info-grid">
+        <div class="info-box">
+            <h3>🌱 Farmer First</h3>
+            <p>Farmers can manage products, markets, orders, and pickup schedules easily.</p>
+        </div>
+
+        <div class="info-box">
+            <h3>🛒 Live Availability</h3>
+            <p>Customers see real-time product availability from nearby markets.</p>
+        </div>
+
+        <div class="info-box">
+            <h3>📍 Organized Pickup</h3>
+            <p>Smart pickup booking system reduces crowding and waiting time.</p>
+        </div>
+    </div>
+</section>
+
+</body>
+</html>

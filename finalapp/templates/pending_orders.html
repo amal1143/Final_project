@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Farmer Orders</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Segoe UI", Arial, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #fff8e1, #fffde7);
+            min-height: 100vh;
+            padding: 20px 0;
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 30px;
+            color: #f57f17;
+            font-size: 28px;
+        }
+
+        .table-container {
+            max-width: 1200px;
+            margin: auto;
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th {
+            background: linear-gradient(90deg, #fbc02d, #f9a825);
+            color: white;
+            padding: 14px;
+            font-size: 14px;
+            text-align: center;
+        }
+
+        td {
+            padding: 12px;
+            text-align: center;
+            font-size: 14px;
+        }
+
+        tr:nth-child(even) {
+            background: #fffde7;
+        }
+
+        button {
+            padding: 6px 14px;
+            background: #2e7d32;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        button:hover {
+            background: #1b5e20;
+        }
+
+        .completed {
+            background: #d4edda;
+            color: #155724;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-weight: 600;
+        }
+
+        .empty {
+            padding: 20px;
+            font-weight: 600;
+            color: #777;
+        }
+    </style>
+</head>
+
+<body>
+
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-success mb-4">
+    <div class="container">
+        <a class="navbar-brand" href="#">🌾 Farmer Dashboard</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'farmer_home' %}">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'farmer_active_products' %}">Active Products</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'farmer_pending_orders' %}">Pending Orders</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'farmer_pickup_bookings' %}">Pickup Bookings</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'logout' %}">Logout</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<!-- Page Heading -->
+<h2>📦 Pending Orders</h2>
+
+<!-- Orders Table -->
+<div class="table-container">
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Product</th>
+            <th>Customer</th>
+            <th>Phone</th>
+            <th>Address</th>
+            <th>Qty</th>
+            <th>Total</th>
+            <th>Action</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for order in orders %}
+        <tr>
+            <td>{{ order.product.product_name }}</td>
+            <td>{{ order.customer.user.first_name|default:"No Name" }}</td>
+            <td>{{ order.customer.phone|default:"Not Provided" }}</td>
+            <td>{{ order.customer.address|default:"Not Provided" }}</td>
+            <td>{{ order.quantity }}</td>
+            <td>₹{{ order.total_amount }}</td>
+            <td>
+                {% if order.status != "COMPLETED" %}
+                <form method="post" action="{% url 'complete_order' order.id %}">
+                    {% csrf_token %}
+                    <button type="submit">Complete</button>
+                </form>
+                {% else %}
+                <span class="completed">Completed</span>
+                {% endif %}
+            </td>
+        </tr>
+        {% empty %}
+        <tr>
+            <td colspan="7" class="empty">No Orders Available</td>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>

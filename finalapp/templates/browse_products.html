@@ -1,0 +1,230 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Browse Products</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <style>
+        :root{
+            --primary:#2563eb;
+            --primary-dark:#1e40af;
+            --bg:#f4f6f9;
+            --text:#1f2937;
+            --muted:#6b7280;
+            --card:#ffffff;
+            --radius:16px;
+            --shadow:0 8px 22px rgba(0,0,0,0.08);
+            --shadow-hover:0 16px 38px rgba(37,99,235,0.25);
+        }
+
+        *{
+            margin:0;
+            padding:0;
+            box-sizing:border-box;
+            font-family:"Segoe UI", Arial, sans-serif;
+        }
+
+        body{
+            background:linear-gradient(135deg,#eef2ff,#f8fafc);
+            color:var(--text);
+        }
+
+        /* ===== NAVBAR ===== */
+        .navbar{
+            background:linear-gradient(135deg,var(--primary),var(--primary-dark));
+            padding:16px 30px;
+            display:flex;
+            align-items:center;
+            justify-content:space-between;
+            box-shadow:var(--shadow);
+            position:sticky;
+            top:0;
+            z-index:100;
+        }
+
+        .navbar .brand{
+            font-size:20px;
+            font-weight:600;
+            color:white;
+            text-decoration:none;
+        }
+
+        .nav-links{
+            display:flex;
+            gap:18px;
+            align-items:center;
+        }
+
+        .nav-links a{
+            color:rgba(255,255,255,0.9);
+            text-decoration:none;
+            font-weight:500;
+            padding:8px 14px;
+            border-radius:20px;
+            transition:0.3s;
+        }
+
+        .nav-links a:hover{
+            background:rgba(255,255,255,0.2);
+            color:white;
+        }
+
+        /* ===== CONTAINER ===== */
+        .container{
+            max-width:1200px;
+            margin:40px auto;
+            padding:0 22px;
+        }
+
+        .page-title{
+            font-size:24px;
+            font-weight:600;
+            margin-bottom:30px;
+        }
+
+        /* ===== PRODUCTS GRID ===== */
+        .products{
+            display:grid;
+            grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+            gap:26px;
+        }
+
+        .product-card{
+            background:var(--card);
+            border-radius:var(--radius);
+            box-shadow:var(--shadow);
+            overflow:hidden;
+            transition:all 0.35s ease;
+        }
+
+        .product-card:hover{
+            transform:translateY(-8px);
+            box-shadow:var(--shadow-hover);
+        }
+
+        .product-card img{
+            width:100%;
+            height:190px;
+            object-fit:cover;
+        }
+
+        .product-body{
+            padding:20px;
+            text-align:center;
+        }
+
+        .product-body h4{
+            font-size:18px;
+            margin-bottom:6px;
+        }
+
+        .product-body p{
+            font-size:14px;
+            color:var(--muted);
+            margin-bottom:6px;
+        }
+
+        .price{
+            font-size:18px;
+            font-weight:600;
+            color:#16a34a;
+            margin:12px 0 16px;
+        }
+
+        .btn{
+            display:inline-block;
+            text-decoration:none;
+            background:linear-gradient(135deg,var(--primary),var(--primary-dark));
+            color:white;
+            padding:10px 22px;
+            border-radius:30px;
+            font-weight:500;
+            transition:0.3s;
+        }
+
+        .btn:hover{
+            transform:scale(1.05);
+            box-shadow:0 8px 20px rgba(37,99,235,0.4);
+        }
+
+        /* ===== EMPTY STATE ===== */
+        .empty{
+            grid-column:1/-1;
+            background:white;
+            padding:50px;
+            text-align:center;
+            border-radius:var(--radius);
+            box-shadow:var(--shadow);
+        }
+
+        /* ===== MOBILE ===== */
+        @media(max-width:768px){
+            .navbar{
+                padding:14px 18px;
+            }
+            .nav-links{
+                gap:10px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<!-- ===== NAVBAR ===== -->
+<div class="navbar">
+    <a href="{% url 'customer_home' %}" class="brand">🧺 Customer</a>
+
+    <div class="nav-links">
+        <a href="{% url 'customer_home' %}">Dashboard</a>
+        <a href="{% url 'customer_markets' %}">Markets</a>
+        <a href="{% url 'browse_products' %}">Products</a>
+        <a href="{% url 'my_orders' %}">Orders</a>
+        <a href="{% url 'customer_pickup_bookings' %}">Pickups</a>
+    </div>
+</div>
+
+<!-- ===== CONTENT ===== -->
+<div class="container">
+
+    <div class="page-title">Fresh Products from Farmers</div>
+
+    <div class="products">
+
+        {% for product in products %}
+        <div class="product-card">
+
+            {% if product.image %}
+                <img src="{{ product.image.url }}">
+            {% else %}
+                <img src="{% static 'images/no-image.png' %}">
+            {% endif %}
+
+            <div class="product-body">
+                <h4>{{ product.name }}</h4>
+                <p>Farmer: {{ product.farmer.user.first_name }}</p>
+                <p>Market: {{ product.farmer.market.name }}</p>
+
+                <div class="price">₹{{ product.price }}</div>
+
+                <a href="{% url 'add_order_details' product.id %}" class="btn">
+                    Buy Now
+                </a>
+            </div>
+        </div>
+
+        {% empty %}
+        <div class="empty">
+            <h4>No products available</h4>
+            <p>Please check back later.</p>
+        </div>
+        {% endfor %}
+
+    </div>
+
+</div>
+
+</body>
+</html>

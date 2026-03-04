@@ -1,0 +1,176 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Edit Product</title>
+
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', sans-serif;
+            background: #fdf6e3;
+        }
+
+        /* ===== NAVBAR ===== */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 14px 30px;
+            background: #2e5d2e;
+            color: white;
+        }
+
+        .navbar .logo {
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        .navbar ul {
+            list-style: none;
+            display: flex;
+            gap: 22px;
+            margin: 0;
+            padding: 0;
+        }
+
+        .navbar ul li a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            padding: 6px 10px;
+            border-radius: 6px;
+        }
+
+        .navbar ul li a:hover {
+            background: rgba(255,255,255,0.2);
+        }
+
+        .logout {
+            background: #e76f51;
+            padding: 8px 14px;
+            border-radius: 6px;
+            text-decoration: none;
+            color: white;
+            font-weight: 500;
+        }
+
+        /* ===== FORM ===== */
+        .page {
+            padding: 40px;
+        }
+
+        .container {
+            max-width: 500px;
+            margin: auto;
+            background: white;
+            padding: 30px;
+            border-radius: 16px;
+            box-shadow: 0 6px 14px rgba(0,0,0,0.12);
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        label {
+            font-weight: 600;
+            margin-top: 12px;
+            display: block;
+        }
+
+        input, textarea {
+            width: 100%;
+            padding: 10px;
+            margin-top: 6px;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+        }
+
+        img {
+            width: 120px;
+            height: 120px;
+            object-fit: cover;
+            border-radius: 10px;
+            margin-top: 10px;
+        }
+
+        button {
+            width: 100%;
+            margin-top: 20px;
+            padding: 12px;
+            background: #0d6efd;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #0b5ed7;
+        }
+
+        .note {
+            font-size: 14px;
+            color: #e65100;
+            margin-top: 10px;
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+
+<!-- ✅ NAVBAR -->
+<nav class="navbar">
+    <div class="logo">🌱 Farmer Panel</div>
+
+    <ul>
+        <li><a href="{% url 'farmer_home' %}">Dashboard</a></li>
+        <li><a href="{% url 'add' %}">Add Product</a></li>
+        <li><a href="{% url 'view_products' %}">My Products</a></li>
+        <li><a href="{% url 'profile' %}">Profile</a></li>
+    </ul>
+
+    <a href="{% url 'logout' %}" class="logout">Logout</a>
+</nav>
+
+<!-- PAGE CONTENT -->
+<div class="page">
+    <div class="container">
+        <h2>Edit Product</h2>
+
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+
+            <label>Product Name</label>
+            <input type="text" name="product_name" value="{{ product.product_name }}" required>
+
+            <label>Price (₹)</label>
+            <input type="number" name="price" value="{{ product.price }}" required>
+
+            <label>Quantity</label>
+            <input type="number" name="quantity" value="{{ product.quantity }}" required>
+
+            <label>Description</label>
+            <textarea name="description" rows="3">{{ product.description }}</textarea>
+
+            <label>Current Image</label>
+            <img src="{{ product.image.url }}" alt="product">
+
+            <label>Change Image</label>
+            <input type="file" name="image">
+
+            <button type="submit">Update Product</button>
+
+            <p class="note">
+                ⚠ After editing, product will require admin approval again
+            </p>
+        </form>
+    </div>
+</div>
+
+</body>
+</html>

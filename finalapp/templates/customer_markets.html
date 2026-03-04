@@ -1,0 +1,110 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Search Markets</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <style>
+        body {
+            margin: 0;
+            font-family: "Segoe UI", Arial, sans-serif;
+            background: #f4f6f9;
+        }
+
+        header {
+            background: #2563eb;
+            color: white;
+            padding: 16px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        header a {
+            color: white;
+            text-decoration: none;
+            background: rgba(255,255,255,0.15);
+            padding: 8px 14px;
+            border-radius: 8px;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 30px auto;
+            padding: 0 20px;
+        }
+
+        h2 {
+            margin-bottom: 20px;
+        }
+
+        .markets {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 20px;
+        }
+
+        .market-card {
+            background: white;
+            padding: 20px;
+            border-radius: 14px;
+            box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+        }
+
+        .market-card h3 {
+            margin-bottom: 6px;
+        }
+
+        .market-card p {
+            color: #6b7280;
+            font-size: 14px;
+            margin-bottom: 12px;
+        }
+
+        .market-card a {
+            display: inline-block;
+            text-decoration: none;
+            background: #2563eb;
+            color: white;
+            padding: 8px 14px;
+            border-radius: 8px;
+            font-size: 14px;
+        }
+
+        .market-card a:hover {
+            background: #1d4ed8;
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+    <h3>🔍 Search Markets</h3>
+    <a href="{% url 'customer_home' %}">Back</a>
+</header>
+
+<div class="container">
+
+    <h2>Available Farmer Markets</h2>
+
+    <div class="markets">
+        {% for market in markets %}
+            <div class="market-card">
+                <h3>{{ market.name }}</h3>
+                <p>{{ market.location }}</p>
+                <a href="{% url 'market_products' market.id %}">View Products</a>
+
+
+            </div>
+        {% empty %}
+            <p>No markets available.</p>
+        {% endfor %}
+    </div>
+
+</div>
+
+</body>
+</html>

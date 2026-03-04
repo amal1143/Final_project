@@ -1,0 +1,202 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Pay with Razorpay</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+
+    <style>
+        :root{
+            --primary:#2563eb;
+            --primary-dark:#1e40af;
+            --bg:#f4f6f9;
+            --text:#1f2937;
+            --muted:#6b7280;
+            --card:#ffffff;
+            --shadow:0 15px 35px rgba(0,0,0,0.12);
+        }
+
+        *{
+            margin:0;
+            padding:0;
+            box-sizing:border-box;
+            font-family:"Segoe UI", Arial, sans-serif;
+        }
+
+        body{
+            background:linear-gradient(135deg,#eef2ff,#f8fafc);
+            min-height:100vh;
+        }
+
+        /* ===== NAVBAR ===== */
+        .navbar{
+            background:linear-gradient(135deg,var(--primary),var(--primary-dark));
+            padding:16px 30px;
+            display:flex;
+            justify-content:space-between;
+            align-items:center;
+            box-shadow:0 10px 25px rgba(0,0,0,0.15);
+            position:sticky;
+            top:0;
+            z-index:100;
+        }
+
+        .navbar .brand{
+            color:white;
+            font-size:20px;
+            font-weight:600;
+            text-decoration:none;
+        }
+
+        .nav-links{
+            display:flex;
+            gap:18px;
+        }
+
+        .nav-links a{
+            color:rgba(255,255,255,0.9);
+            text-decoration:none;
+            font-weight:500;
+            padding:8px 14px;
+            border-radius:20px;
+            transition:0.3s;
+        }
+
+        .nav-links a:hover{
+            background:rgba(255,255,255,0.2);
+            color:white;
+        }
+
+        /* ===== PAYMENT LAYOUT ===== */
+        .page-wrapper{
+            min-height:calc(100vh - 80px);
+            display:flex;
+            justify-content:center;
+            align-items:center;
+            padding:40px 20px;
+        }
+
+        .card{
+            background:var(--card);
+            width:100%;
+            max-width:420px;
+            padding:30px;
+            border-radius:16px;
+            box-shadow:var(--shadow);
+            text-align:center;
+        }
+
+        .card h2{
+            font-size:22px;
+            margin-bottom:10px;
+            color:#111827;
+        }
+
+        .amount{
+            font-size:32px;
+            font-weight:700;
+            color:#16a34a;
+            margin:18px 0 28px;
+        }
+
+        .pay-btn{
+            width:100%;
+            background:linear-gradient(135deg,var(--primary),var(--primary-dark));
+            color:white;
+            border:none;
+            padding:14px;
+            font-size:16px;
+            border-radius:30px;
+            cursor:pointer;
+            font-weight:600;
+            transition:0.2s;
+        }
+
+        .pay-btn:hover{
+            transform:translateY(-2px);
+            box-shadow:0 10px 25px rgba(37,99,235,0.4);
+        }
+
+        .secure{
+            margin-top:18px;
+            font-size:13px;
+            color:var(--muted);
+        }
+
+        .secure span{
+            color:#10b981;
+            font-weight:600;
+        }
+
+        @media(max-width:768px){
+            .navbar{
+                padding:14px 18px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<!-- ===== NAVBAR ===== -->
+<div class="navbar">
+    <a href="{% url 'customer_home' %}" class="brand">💳 Payment</a>
+
+    <div class="nav-links">
+        <a href="{% url 'customer_home' %}">Dashboard</a>
+        <a href="{% url 'customer_markets' %}">Markets</a>
+        <a href="{% url 'browse_products' %}">Products</a>
+        <a href="{% url 'my_orders' %}">Orders</a>
+    </div>
+</div>
+
+<!-- ===== PAYMENT CARD ===== -->
+<div class="page-wrapper">
+    <div class="card">
+        <h2>Complete Your Payment</h2>
+
+        <div class="amount">₹ {{ order.total_amount }}</div>
+
+        <button id="pay-btn" class="pay-btn">
+            Pay Securely
+        </button>
+
+        <div class="secure">
+            🔒 100% Secure payments via <span>Razorpay</span>
+        </div>
+    </div>
+</div>
+
+<form id="razorpay-form" method="POST" action="{% url 'razorpay_success' %}">
+    {% csrf_token %}
+    <input type="hidden" name="order_id" value="{{ order.razorpay_order_id }}">
+    <input type="hidden" name="razorpay_payment_id" id="payment_id">
+</form>
+
+<script>
+var options = {
+    "key": "{{ razorpay_key }}",
+    "amount": "{{ order.total_amount }}00",
+    "currency": "INR",
+    "name": "Farmers Market",
+    "description": "Order Payment",
+    "order_id": "{{ order.razorpay_order_id }}",
+    "handler": function (response){
+        document.getElementById("payment_id").value = response.razorpay_payment_id;
+        document.getElementById("razorpay-form").submit();
+    }
+};
+
+var rzp = new Razorpay(options);
+
+document.getElementById("pay-btn").onclick = function(e){
+    rzp.open();
+    e.preventDefault();
+}
+</script>
+
+</body>
+</html>

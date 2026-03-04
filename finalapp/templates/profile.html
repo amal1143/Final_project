@@ -1,0 +1,221 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>My Profile</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+/* ===== RESET ===== */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+/* ===== BODY (UPDATED BACKGROUND COLOR) ===== */
+body {
+    font-family: "Segoe UI", Arial, sans-serif;
+    background: linear-gradient(135deg, #e8f5e9, #e3f2fd);
+    min-height: 100vh;
+}
+
+/* ===== NAVBAR ===== */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 30px;
+    background: linear-gradient(90deg, #2e5d2e, #3b7a3b);
+    color: white;
+    box-shadow: 0 4px 14px rgba(0,0,0,.15);
+}
+
+.navbar .logo {
+    font-size: 20px;
+    font-weight: 700;
+}
+
+.navbar ul {
+    list-style: none;
+    display: flex;
+    gap: 22px;
+}
+
+.navbar ul li a {
+    color: white;
+    text-decoration: none;
+    font-weight: 500;
+    padding: 8px 14px;
+    border-radius: 8px;
+    transition: .25s;
+}
+
+.navbar ul li a:hover,
+.navbar ul li a.active {
+    background: rgba(255,255,255,0.25);
+}
+
+.logout-btn {
+    background:#e76f51;
+    color:white;
+    padding:8px 16px;
+    border-radius:10px;
+    text-decoration:none;
+    font-weight:600;
+}
+
+.logout-btn:hover {
+    background:#d65a3c;
+}
+
+/* ===== PROFILE CARD ===== */
+.profile-container {
+    max-width: 520px;
+    background: white;
+    margin: 60px auto;
+    padding: 34px 32px;
+    border-radius: 22px;
+    box-shadow: 0 12px 30px rgba(0,0,0,.12);
+    animation: fadeUp .6s ease;
+}
+
+@keyframes fadeUp {
+    from { opacity:0; transform: translateY(20px); }
+    to { opacity:1; transform: translateY(0); }
+}
+
+/* ===== TITLE ===== */
+h2 {
+    text-align: center;
+    margin-bottom: 6px;
+    font-size: 26px;
+}
+
+.subtitle {
+    text-align: center;
+    color: #666;
+    font-size: 14px;
+    margin-bottom: 24px;
+}
+
+/* ===== FORM ===== */
+label {
+    font-weight: 600;
+    font-size: 14px;
+    margin-top: 14px;
+    display: block;
+}
+
+input {
+    width: 100%;
+    padding: 12px 14px;
+    margin-top: 6px;
+    border-radius: 12px;
+    border: 1px solid #ccc;
+    font-size: 15px;
+    transition: .25s;
+}
+
+input:focus {
+    outline: none;
+    border-color: #2e5d2e;
+    box-shadow: 0 0 0 3px rgba(46,93,46,.15);
+}
+
+input[readonly] {
+    background: #f3f3f3;
+    cursor: not-allowed;
+}
+
+/* ===== BUTTON ===== */
+.btn {
+    width: 100%;
+    margin-top: 26px;
+    padding: 14px;
+    background: linear-gradient(135deg, #2e5d2e, #3b7a3b);
+    color: white;
+    border: none;
+    border-radius: 14px;
+    font-size: 17px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: .3s;
+}
+
+.btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(0,0,0,.2);
+}
+
+/* ===== BACK LINK ===== */
+.back {
+    display: block;
+    margin-top: 18px;
+    text-align: center;
+    text-decoration: none;
+    color: #2e5d2e;
+    font-weight: 600;
+    transition: .2s;
+}
+
+.back:hover {
+    text-decoration: underline;
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 640px) {
+    .profile-container {
+        margin: 40px 16px;
+        padding: 28px 22px;
+    }
+    .navbar {
+        flex-direction: column;
+        gap: 10px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar">
+    <div class="logo">🌱 Farmer Panel</div>
+
+    <ul>
+        <li><a href="{% url 'farmer_home' %}">Dashboard</a></li>
+        <li><a href="{% url 'add' %}">Add Product</a></li>
+        <li><a href="{% url 'view_products' %}">My Products</a></li>
+        <li><a href="{% url 'profile' %}" class="active">Profile</a></li>
+    </ul>
+
+    <a href="{% url 'logout' %}" class="logout-btn">Logout</a>
+</nav>
+
+<!-- PROFILE -->
+<div class="profile-container">
+    <h2>{{ user.first_name }}'s Profile</h2>
+    <p class="subtitle">Manage your personal information</p>
+
+    <form method="POST">
+        {% csrf_token %}
+
+        <label>Full Name</label>
+        <input type="text" name="full_name" value="{{ user.first_name }}" required>
+
+        <label>Username</label>
+        <input type="text" value="{{ user.username }}" readonly>
+
+        <label>Email</label>
+        <input type="email" name="email" value="{{ user.email }}" required>
+
+        <button type="submit" class="btn">💾 Update Profile</button>
+    </form>
+
+    <a href="{% url 'farmer_home' %}" class="back">⬅ Back to Dashboard</a>
+</div>
+
+</body>
+</html>

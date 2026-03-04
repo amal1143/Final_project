@@ -1,0 +1,333 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>My Products</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+/* ===== THEME ===== */
+:root{
+    --green-dark:#2e5d2e;
+    --green-light:#3b7a3b;
+    --bg-main:linear-gradient(135deg,#f1f8f4,#e6f2ea);
+    --card-bg:#ffffff;
+    --radius-lg:22px;
+    --radius-md:14px;
+    --shadow-soft:0 10px 25px rgba(0,0,0,.12);
+    --shadow-hover:0 18px 38px rgba(0,0,0,.18);
+}
+
+/* ===== RESET ===== */
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+}
+
+/* ===== BODY ===== */
+body{
+    font-family:"Segoe UI",Tahoma,sans-serif;
+    min-height:100vh;
+    color:#222;
+    background:var(--bg-main);
+}
+
+/* ===== NAVBAR ===== */
+.navbar{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:16px 34px;
+    background:linear-gradient(90deg,var(--green-dark),var(--green-light));
+    color:white;
+    box-shadow:0 4px 14px rgba(0,0,0,.2);
+}
+
+.logo{
+    font-size:22px;
+    font-weight:700;
+}
+
+.navbar ul{
+    list-style:none;
+    display:flex;
+    gap:22px;
+}
+
+.navbar a{
+    color:white;
+    text-decoration:none;
+    font-weight:500;
+    padding:8px 16px;
+    border-radius:10px;
+    transition:.25s;
+}
+
+.navbar a:hover,
+.navbar a.active{
+    background:rgba(255,255,255,0.25);
+}
+
+.logout-btn{
+    background:#e76f51;
+    padding:9px 18px;
+    border-radius:12px;
+    font-weight:600;
+}
+
+.logout-btn:hover{background:#d65a3c;}
+
+/* ===== PAGE CONTAINER ===== */
+.container{
+    padding:40px 20px 60px;
+}
+
+/* ===== HEADING ===== */
+h2{
+    text-align:center;
+    font-size:30px;
+    margin-bottom:10px;
+}
+
+/* ===== FILTER ===== */
+.filter-box{
+    text-align:center;
+    margin:28px 0;
+}
+
+select{
+    padding:11px 20px;
+    border-radius:12px;
+    border:1px solid #ccc;
+    font-size:15px;
+}
+
+/* ===== GRID ===== */
+.grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(320px,1fr));
+    gap:34px;
+    max-width:1200px;
+    margin:auto;
+}
+
+/* ===== CARD ===== */
+.card{
+    background:var(--card-bg);
+    padding:26px;
+    border-radius:var(--radius-lg);
+    box-shadow:var(--shadow-soft);
+    display:flex;
+    flex-direction:column;
+    text-align:center;
+    transition:.35s ease;
+}
+
+.card:hover{
+    transform:translateY(-10px);
+    box-shadow:var(--shadow-hover);
+}
+
+/* ===== STATUS ===== */
+.status-badge{
+    padding:7px 22px;
+    border-radius:999px;
+    font-weight:700;
+    font-size:14px;
+    margin-bottom:16px;
+    align-self:center;
+}
+
+.approved{
+    background:#e8f5e9;
+    color:#2e7d32;
+}
+
+.pending{
+    background:#fff3e0;
+    color:#ef6c00;
+}
+
+/* ===== IMAGE ===== */
+.image-box{
+    width:160px;
+    height:160px;
+    margin:0 auto 18px;
+    border-radius:20px;
+    overflow:hidden;
+    background:#f3f3f3;
+}
+
+.image-box img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    transition:.4s ease;
+}
+
+.card:hover img{
+    transform:scale(1.15);
+}
+
+/* ===== TEXT ===== */
+h3{
+    font-size:22px;
+    margin:6px 0;
+}
+
+.price-tag{
+    font-size:16px;
+    font-weight:700;
+    margin-bottom:10px;
+}
+
+.market{
+    font-size:14px;
+    color:#555;
+    margin-bottom:18px;
+}
+
+/* ===== BUTTONS ===== */
+.action-buttons{
+    display:flex;
+    gap:14px;
+    justify-content:center;
+    margin-top:auto;
+}
+
+.btn-edit,
+.btn-delete{
+    padding:11px 26px;
+    border-radius:14px;
+    font-weight:600;
+    text-decoration:none;
+    transition:.25s;
+}
+
+.btn-edit{
+    background:#198754;
+    color:white;
+}
+
+.btn-edit:hover{background:#157347;}
+
+.btn-delete{
+    background:#dc3545;
+    color:white;
+}
+
+.btn-delete:hover{background:#bb2d3b;}
+
+.locked{
+    font-weight:600;
+    color:#888;
+}
+
+/* ===== EMPTY ===== */
+.grid p{
+    grid-column:1/-1;
+    text-align:center;
+    font-size:18px;
+    color:#777;
+}
+
+/* ===== RESPONSIVE ===== */
+@media(max-width:768px){
+    .navbar{
+        flex-direction:column;
+        gap:12px;
+    }
+    .navbar ul{
+        flex-wrap:wrap;
+        justify-content:center;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar">
+    <div class="logo">🌱 Farmer Panel</div>
+    <ul>
+        <li><a href="{% url 'farmer_home' %}">Dashboard</a></li>
+        <li><a href="{% url 'add' %}">Add Product</a></li>
+        <li><a href="{% url 'view_products' %}" class="active">My Products</a></li>
+        <li><a href="{% url 'profile' %}">Profile</a></li>
+    </ul>
+    <a href="{% url 'logout' %}" class="logout-btn">Logout</a>
+</nav>
+
+<div class="container">
+
+<h2>My Products</h2>
+
+<!-- FILTER -->
+<div class="filter-box">
+<select id="statusFilter" onchange="filterStatus()">
+    <option value="all">All</option>
+    <option value="approved">Approved</option>
+    <option value="pending">Pending</option>
+</select>
+</div>
+
+<div class="grid">
+{% for product in products %}
+<div class="card" data-status="{% if product.is_approved %}approved{% else %}pending{% endif %}">
+
+    <span class="status-badge {% if product.is_approved %}approved{% else %}pending{% endif %}">
+        {% if product.is_approved %}Approved{% else %}Pending{% endif %}
+    </span>
+
+    <div class="image-box">
+        {% if product.image %}
+            <img src="{{ product.image.url }}">
+        {% else %}
+            <img src="{% static 'images/default.png' %}">
+        {% endif %}
+    </div>
+
+    <h3>{{ product.product_name }}</h3>
+    <p class="price-tag">₹{{ product.price }} | Qty: {{ product.quantity }}</p>
+
+    {% if product.farmer.market %}
+        <p class="market">🏪 {{ product.farmer.market.name }}</p>
+    {% else %}
+        <p class="market" style="color:red;">❌ No Market Assigned</p>
+    {% endif %}
+
+    <div class="action-buttons">
+        {% if not product.is_approved %}
+            <a href="{% url 'edit_product' product.id %}" class="btn-edit">✏️ Edit</a>
+        {% else %}
+            <span class="locked">Approved (Locked)</span>
+        {% endif %}
+        <a href="{% url 'delete_product' product.id %}"
+           class="btn-delete"
+           onclick="return confirm('Delete this product?');">
+           🗑 Delete
+        </a>
+    </div>
+</div>
+{% empty %}
+<p>No products added yet.</p>
+{% endfor %}
+</div>
+
+</div>
+
+<script>
+function filterStatus(){
+    const value=document.getElementById("statusFilter").value;
+    document.querySelectorAll(".card").forEach(card=>{
+        card.style.display =
+            value==="all" || card.dataset.status===value ? "flex":"none";
+    });
+}
+</script>
+
+</body>
+</html>

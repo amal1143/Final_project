@@ -1,0 +1,197 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Pending Products</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <style>
+        /* ===== RESET ===== */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: "Segoe UI", Arial, sans-serif;
+        }
+
+        body {
+            background: #f4f6f8;
+        }
+
+        /* ===== NAVBAR ===== */
+        .navbar {
+            background: #1f2937;
+            color: #fff;
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .navbar .logo {
+            font-size: 20px;
+            font-weight: bold;
+            letter-spacing: 0.5px;
+        }
+
+        .navbar a {
+            color: #fff;
+            text-decoration: none;
+            margin-left: 20px;
+            font-size: 14px;
+        }
+
+        .navbar a:hover {
+            text-decoration: underline;
+        }
+
+        /* ===== CONTAINER ===== */
+        .container {
+            padding: 30px;
+        }
+
+        h2 {
+            margin-bottom: 20px;
+            color: #1f2937;
+        }
+
+        /* ===== TABLE ===== */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: #fff;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.05);
+        }
+
+        th {
+            background: #2e5d2e;
+            color: white;
+            padding: 14px;
+            font-size: 14px;
+        }
+
+        td {
+            padding: 14px;
+            text-align: center;
+            border-bottom: 1px solid #eee;
+            font-size: 14px;
+        }
+
+        tr:hover {
+            background: #f9fafb;
+        }
+
+        /* ===== BUTTONS ===== */
+        .btn {
+            padding: 8px 14px;
+            border-radius: 6px;
+            color: #fff;
+            font-size: 13px;
+            text-decoration: none;
+            display: inline-block;
+            margin: 2px;
+        }
+
+        .approve {
+            background: #22c55e;
+        }
+
+        .approve:hover {
+            background: #16a34a;
+        }
+
+        .reject {
+            background: #ef4444;
+        }
+
+        .reject:hover {
+            background: #dc2626;
+        }
+
+        /* ===== EMPTY STATE ===== */
+        .empty {
+            padding: 20px;
+            color: #6b7280;
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 768px) {
+            table, thead, tbody, th, td, tr {
+                display: block;
+            }
+
+            th {
+                display: none;
+            }
+
+            tr {
+                margin-bottom: 15px;
+            }
+
+            td {
+                text-align: right;
+                padding-left: 50%;
+                position: relative;
+            }
+
+            td::before {
+                content: attr(data-label);
+                position: absolute;
+                left: 15px;
+                font-weight: bold;
+                color: #374151;
+                text-align: left;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<!-- ===== NAVBAR ===== -->
+<div class="navbar">
+    <div class="logo">Admin Panel</div>
+    <div class="menu">
+        <a href="{% url 'admin_home' %}">Dashboard</a>
+        <a href="{% url 'view_farmers' %}">Farmers</a>
+        <a href="{% url 'logout' %}">Logout</a>
+    </div>
+</div>
+
+<!-- ===== CONTENT ===== -->
+<div class="container">
+    <h2>Pending Products</h2>
+
+    <table>
+        <tr>
+            <th>Farmer</th>
+            <th>Product</th>
+            <th>Price</th>
+            <th>Quantity</th>
+            <th>Action</th>
+        </tr>
+
+        {% for product in products %}
+        <tr>
+            <td data-label="Farmer">{{ product.farmer.user.username }}</td>
+            <td data-label="Product">{{ product.product_name }}</td>
+            <td data-label="Price">₹ {{ product.price }}</td>
+            <td data-label="Quantity">{{ product.quantity }}</td>
+            <td data-label="Action">
+                <a href="{% url 'approve_product' product.id %}" class="btn approve">Approve</a>
+                <a href="{% url 'reject_product' product.id %}" class="btn reject">Reject</a>
+            </td>
+        </tr>
+        {% empty %}
+        <tr>
+            <td colspan="5" class="empty">No pending products found</td>
+        </tr>
+        {% endfor %}
+    </table>
+</div>
+
+</body>
+</html>

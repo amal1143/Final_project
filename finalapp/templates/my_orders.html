@@ -1,0 +1,258 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>My Orders</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <style>
+        :root{
+            --primary:#2563eb;
+            --primary-dark:#1e40af;
+            --bg:#f4f6f9;
+            --text:#1f2937;
+            --muted:#6b7280;
+            --card:#ffffff;
+            --radius:16px;
+            --shadow:0 10px 25px rgba(0,0,0,0.08);
+        }
+
+        *{
+            margin:0;
+            padding:0;
+            box-sizing:border-box;
+            font-family:"Segoe UI", Arial, sans-serif;
+        }
+
+        body{
+            background:linear-gradient(135deg,#eef2ff,#f8fafc);
+            color:var(--text);
+        }
+
+        /* ===== NAVBAR ===== */
+        .navbar{
+            background:linear-gradient(135deg,var(--primary),var(--primary-dark));
+            padding:16px 30px;
+            display:flex;
+            justify-content:space-between;
+            align-items:center;
+            box-shadow:var(--shadow);
+            position:sticky;
+            top:0;
+            z-index:100;
+        }
+
+        .navbar .brand{
+            color:white;
+            font-size:20px;
+            font-weight:600;
+            text-decoration:none;
+        }
+
+        .nav-links{
+            display:flex;
+            gap:18px;
+            align-items:center;
+        }
+
+        .nav-links a{
+            color:rgba(255,255,255,0.9);
+            text-decoration:none;
+            font-weight:500;
+            padding:8px 14px;
+            border-radius:20px;
+            transition:0.3s;
+        }
+
+        .nav-links a:hover{
+            background:rgba(255,255,255,0.2);
+            color:white;
+        }
+
+        /* ===== CONTAINER ===== */
+        .container{
+            max-width:1200px;
+            margin:40px auto;
+            padding:0 22px;
+        }
+
+        .page-title{
+            font-size:24px;
+            font-weight:600;
+            margin-bottom:26px;
+        }
+
+        /* ===== TABLE ===== */
+        .table-wrapper{
+            background:var(--card);
+            border-radius:var(--radius);
+            box-shadow:var(--shadow);
+            overflow-x:auto;
+        }
+
+        table{
+            width:100%;
+            border-collapse:collapse;
+            min-width:700px;
+        }
+
+        th{
+            background:linear-gradient(135deg,var(--primary),var(--primary-dark));
+            color:white;
+            padding:16px;
+            font-weight:600;
+            text-align:center;
+        }
+
+        td{
+            padding:14px;
+            text-align:center;
+            font-size:14px;
+        }
+
+        tr:nth-child(even){
+            background:#f9fafb;
+        }
+
+        tr:hover{
+            background:#eef2ff;
+        }
+
+        /* ===== STATUS BADGES ===== */
+        .status{
+            padding:6px 14px;
+            border-radius:20px;
+            font-size:12px;
+            font-weight:600;
+            color:rgb(12, 11, 11);
+            display:inline-block;
+        }
+
+        .pending{ background:#fbbf24; }
+        .paid{ background:#10b981; }
+        .cod{ background:#6366f1; }
+
+        /* ===== ACTION BUTTONS ===== */
+        .btn{
+            text-decoration:none;
+            padding:7px 14px;
+            border-radius:20px;
+            font-size:13px;
+            font-weight:500;
+            display:inline-block;
+            margin:2px;
+        }
+
+        .btn-confirm{
+            background:#16a34a;
+            color:white;
+        }
+
+        .btn-delete{
+            background:#dc2626;
+            color:white;
+        }
+
+        .btn-delete:hover{
+            background:#b91c1c;
+        }
+
+        /* ===== EMPTY STATE ===== */
+        .empty{
+            background:white;
+            padding:50px;
+            text-align:center;
+            border-radius:var(--radius);
+            box-shadow:var(--shadow);
+        }
+
+        /* ===== MOBILE ===== */
+        @media(max-width:768px){
+            .navbar{
+                padding:14px 18px;
+            }
+            .page-title{
+                font-size:20px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<!-- ===== NAVBAR ===== -->
+<div class="navbar">
+    <a href="{% url 'customer_home' %}" class="brand">📜 My Orders</a>
+
+    <div class="nav-links">
+        <a href="{% url 'customer_home' %}">Dashboard</a>
+        <a href="{% url 'customer_markets' %}">Markets</a>
+        <a href="{% url 'browse_products' %}">Products</a>
+        <a href="{% url 'my_orders' %}">Orders</a>
+        <a href="{% url 'customer_pickup_bookings' %}">Pickups</a>
+    </div>
+</div>
+
+<!-- ===== CONTENT ===== -->
+<div class="container">
+
+{% if orders %}
+    <div class="table-wrapper">
+        <table>
+            <thead>
+                <tr>
+                    <th>Product</th>
+                    <th>Qty</th>
+                    <th>Total (₹)</th>
+                    <th>Date</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+
+            <tbody>
+            {% for order in orders %}
+                <tr>
+                    <td>{{ order.product.product_name }}</td>
+                    <td>{{ order.quantity }}</td>
+                    <td>₹{{ order.total_amount }}</td>
+                    <td>{{ order.created_at|date:"d M Y" }}</td>
+
+                    <td>
+                        <span class="status {{ order.status }}">
+                            {{ order.status|title }}
+                        </span>
+                    </td>
+
+                    <td>
+                        {% if order.status == "pending" %}
+                            <a href="{% url 'confirm_order' order.id %}" class="btn btn-confirm">
+                                Confirm
+                            </a>
+
+                            <a href="{% url 'delete_order' order.id %}"
+                               class="btn btn-delete"
+                               onclick="return confirm('Remove this order?');">
+                                Remove
+                            </a>
+                        {% else %}
+                            ✔ Completed
+                        {% endif %}
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% else %}
+    <div class="empty">
+        <h3>No orders yet</h3>
+        <p>Start shopping from nearby markets 🚜</p>
+    </div>
+{% endif %}
+
+</div>
+
+</body>
+</html>

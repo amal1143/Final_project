@@ -1,0 +1,135 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: "Segoe UI", Arial, sans-serif;
+            background: #f4f6f9;
+            color: #333;
+        }
+
+        header {
+            background: #1f2937;
+            color: white;
+            padding: 18px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        header h2 {
+            font-size: 22px;
+        }
+
+        .logout {
+            background: #ef4444;
+            color: white;
+            padding: 8px 14px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .dashboard {
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        .welcome {
+            font-size: 20px;
+            margin-bottom: 30px;
+        }
+
+        .cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 25px;
+        }
+
+        .card {
+            background: white;
+            padding: 30px 20px;
+            border-radius: 14px;
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+            text-align: center;
+        }
+
+        .card a {
+            text-decoration: none;
+            color: #1f2937;
+            font-weight: 600;
+            display: inline-block;
+            margin-top: 12px;
+        }
+
+        .icon {
+            font-size: 40px;
+            margin-bottom: 12px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <h2>🛠 Admin Dashboard</h2>
+        <!-- FIXED HERE -->
+        <a href="{% url 'logout' %}" class="logout">Logout</a>
+    </header>
+
+    <div class="dashboard">
+        <p class="welcome">Welcome, <strong>Admin</strong> 👋</p>
+
+        <div class="cards">
+
+            <div class="card">
+                <div class="icon">🌾</div>
+                <a href="{% url 'view_farmers' %}">View Farmers</a>
+            </div>
+
+            <div class="card">
+                <div class="icon">🧑‍🤝‍🧑</div>
+                <a href="{% url 'view_customers' %}">View Customers</a>
+
+            </div>
+
+            <div class="card">
+                <div class="icon">🏪</div>
+                <a href="{% url 'manage_markets' %}">Manage Markets</a>
+            </div>
+
+            <div class="card">
+                <div class="icon">📄</div>
+               <a href="{% url 'admin_reports' %}">View Reports</a>
+
+            </div>
+
+            <div class="card">
+                <div class="icon">🛒</div>
+                <a href="{% url 'admin_products' %}">
+                    Pending Products
+                    {% if pending_count %}
+                    ({{ pending_count }})
+                    {% endif %}
+                </a>
+            </div>
+
+        </div>
+    </div>
+
+</body>
+
+</html>

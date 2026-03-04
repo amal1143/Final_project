@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Pickup Bookings</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+
+/* ===== RESET ===== */
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:"Segoe UI", Arial, sans-serif;
+}
+
+/* ===== BODY ===== */
+body{
+min-height:100vh;
+background:linear-gradient(135deg,#e8f5e9,#f1f8e9);
+padding:30px;
+}
+
+/* ===== HEADER ===== */
+.header{
+display:flex;
+justify-content:space-between;
+align-items:center;
+margin-bottom:25px;
+background:linear-gradient(90deg,#2e7d32,#1b5e20);
+padding:18px 25px;
+border-radius:12px;
+color:white;
+box-shadow:0 6px 18px rgba(0,0,0,0.15);
+}
+
+.header h2{
+font-size:22px;
+}
+
+/* ===== BACK BUTTON ===== */
+.back-btn{
+background:white;
+color:#1b5e20;
+padding:8px 16px;
+text-decoration:none;
+border-radius:8px;
+font-weight:600;
+transition:0.3s;
+}
+
+.back-btn:hover{
+background:#c8e6c9;
+}
+
+/* ===== CONTAINER ===== */
+.table-container{
+background:white;
+padding:25px;
+border-radius:18px;
+box-shadow:0 10px 30px rgba(0,0,0,0.12);
+animation:fadeUp 0.5s ease;
+}
+
+@keyframes fadeUp{
+from{
+opacity:0;
+transform:translateY(20px);
+}
+to{
+opacity:1;
+transform:translateY(0);
+}
+}
+
+/* ===== TABLE ===== */
+table{
+width:100%;
+border-collapse:collapse;
+overflow:hidden;
+border-radius:12px;
+}
+
+th{
+background:linear-gradient(90deg,#43a047,#2e7d32);
+color:white;
+padding:14px;
+font-size:15px;
+}
+
+td{
+padding:14px;
+text-align:center;
+font-size:14px;
+}
+
+/* Zebra rows */
+tr:nth-child(even){
+background:#f1f8e9;
+}
+
+/* Hover */
+tbody tr:hover{
+background:#e8f5e9;
+transform:scale(1.01);
+transition:0.2s;
+}
+
+/* ===== STATUS BADGE ===== */
+.status{
+padding:6px 14px;
+border-radius:20px;
+font-weight:600;
+font-size:13px;
+}
+
+.status.pending{
+background:#fff3cd;
+color:#856404;
+}
+
+.status.completed{
+background:#d4edda;
+color:#155724;
+}
+
+/* ===== BUTTONS ===== */
+.btn{
+padding:8px 14px;
+border-radius:8px;
+text-decoration:none;
+color:white;
+font-size:14px;
+font-weight:600;
+display:inline-block;
+transition:0.3s;
+}
+
+.confirm{
+background:linear-gradient(90deg,#43a047,#2e7d32);
+}
+
+.confirm:hover{
+background:linear-gradient(90deg,#2e7d32,#1b5e20);
+transform:scale(1.05);
+}
+
+.done{
+background:#9e9e9e;
+cursor:not-allowed;
+}
+
+/* ===== EMPTY ===== */
+.empty{
+padding:20px;
+font-weight:600;
+color:#777;
+}
+
+/* ===== MOBILE RESPONSIVE ===== */
+@media(max-width:768px){
+
+body{
+padding:15px;
+}
+
+.header{
+flex-direction:column;
+gap:10px;
+text-align:center;
+}
+
+table, thead, tbody, th, td, tr{
+display:block;
+}
+
+thead{
+display:none;
+}
+
+tr{
+margin-bottom:15px;
+background:#f1f8e9;
+border-radius:10px;
+padding:10px;
+}
+
+td{
+text-align:right;
+padding-left:50%;
+position:relative;
+}
+
+td::before{
+position:absolute;
+left:15px;
+font-weight:bold;
+}
+
+td:nth-child(1)::before{content:"Order ID";}
+td:nth-child(2)::before{content:"Customer";}
+td:nth-child(3)::before{content:"Pickup Date";}
+td:nth-child(4)::before{content:"Status";}
+td:nth-child(5)::before{content:"Action";}
+
+}
+
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header">
+<h2>🚚 Pickup Bookings</h2>
+<a href="{% url 'farmer_home' %}" class="back-btn">⬅ Back</a>
+</div>
+
+<div class="table-container">
+
+<table>
+
+<thead>
+<tr>
+<th>Order ID</th>
+<th>Customer</th>
+<th>Pickup Date</th>
+<th>Status</th>
+<th>Action</th>
+</tr>
+</thead>
+
+<tbody>
+
+{% for booking in bookings %}
+<tr>
+
+<td>#{{ booking.order.id }}</td>
+
+<td>{{ booking.customer.user.username }}</td>
+
+<td>{{ booking.pickup_date }}</td>
+
+<td>
+<span class="status {% if booking.status == 'pending' %}pending{% else %}completed{% endif %}">
+{{ booking.status|title }}
+</span>
+</td>
+
+<td>
+{% if booking.status == "pending" %}
+<a href="{% url 'confirm_pickup' booking.id %}" class="btn confirm">
+Confirm Pickup
+</a>
+{% else %}
+<span class="btn done">Completed</span>
+{% endif %}
+</td>
+
+</tr>
+
+{% empty %}
+<tr>
+<td colspan="5" class="empty">No pickup bookings available</td>
+</tr>
+{% endfor %}
+
+</tbody>
+
+</table>
+
+</div>
+
+</body>
+</html>

@@ -1,0 +1,124 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>View Customers</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: "Segoe UI", Arial, sans-serif;
+        }
+
+        body {
+            background: #f4f6f9;
+        }
+
+        /* NAVBAR */
+        header {
+            background: #1f2937;
+            color: white;
+            padding: 18px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        header a {
+            color: white;
+            text-decoration: none;
+            margin-left: 20px;
+            font-size: 14px;
+        }
+
+        header a:hover {
+            text-decoration: underline;
+        }
+
+        /* CONTENT */
+        .container {
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        h2 {
+            margin-bottom: 20px;
+            color: #1f2937;
+        }
+
+        /* TABLE */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+        }
+
+        th {
+            background: #2e5d2e;
+            color: white;
+            padding: 14px;
+        }
+
+        td {
+            padding: 14px;
+            text-align: center;
+            border-bottom: 1px solid #eee;
+        }
+
+        tr:hover {
+            background: #f9fafb;
+        }
+
+        .empty {
+            padding: 20px;
+            color: #6b7280;
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+    <h2>🧑‍🤝‍🧑 Customers</h2>
+    <div>
+        <a href="{% url 'admin_home' %}">Dashboard</a>
+        <a href="{% url 'logout' %}">Logout</a>
+    </div>
+</header>
+
+<div class="container">
+    <h2>Registered Customers</h2>
+
+    <table>
+        <tr>
+            <th>#</th>
+            <th>Username</th>
+            <th>First Name</th>
+            <th>Email</th>
+        </tr>
+
+        {% for customer in customers %}
+        <tr>
+            <td>{{ forloop.counter }}</td>
+            <td>{{ customer.user.username }}</td>
+            <td>{{ customer.user.first_name }}</td>
+            <td>{{ customer.user.email }}</td>
+        </tr>
+        {% empty %}
+        <tr>
+            <td colspan="4" class="empty">No customers found</td>
+        </tr>
+        {% endfor %}
+    </table>
+</div>
+
+</body>
+</html>

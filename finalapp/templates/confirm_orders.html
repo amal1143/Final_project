@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Confirm Order</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <style>
+
+        /* RESET */
+        *{
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: "Segoe UI", Arial, sans-serif;
+            background: #f4f6f9;
+            margin: 0;
+        }
+
+        /* NAVBAR */
+        header {
+            background: #2563eb;
+            color: white;
+            padding: 14px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 3px 8px rgba(0,0,0,0.1);
+        }
+
+        header h2 {
+            margin: 0;
+            font-size: 20px;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            margin-left: 12px;
+            font-weight: 500;
+            background: rgba(255,255,255,0.15);
+            padding: 7px 14px;
+            border-radius: 6px;
+            transition: 0.2s;
+        }
+
+        .nav-links a:hover {
+            background: rgba(255,255,255,0.30);
+        }
+
+        /* MAIN CONTAINER */
+        .container {
+            max-width: 480px;
+            margin: 60px auto;
+            background: white;
+            padding: 30px;
+            border-radius: 14px;
+            box-shadow: 0 8px 22px rgba(0,0,0,0.08);
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .info p {
+            margin: 10px 0;
+            font-size: 15px;
+        }
+
+        .total {
+            font-size: 22px;
+            font-weight: bold;
+            margin: 25px 0;
+            text-align: center;
+            color: #16a34a;
+        }
+
+        /* BUTTONS */
+        .actions {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .btn {
+            flex: 1;
+            text-align: center;
+            padding: 12px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            color: white;
+            transition: 0.2s;
+        }
+
+        .pay {
+            background: #2563eb;
+        }
+
+        .pay:hover {
+            background: #1d4ed8;
+        }
+
+        .cod {
+            background: #16a34a;
+        }
+
+        .cod:hover {
+            background: #15803d;
+        }
+
+        .back {
+            display: block;
+            margin-top: 20px;
+            text-align: center;
+            text-decoration: none;
+            color: #374151;
+            font-weight: 500;
+        }
+
+        .back:hover {
+            color: #2563eb;
+        }
+
+    </style>
+</head>
+
+<body>
+
+<header>
+    <h2>🧾 Order Details</h2>
+
+    <div class="nav-links">
+        <a href="{% url 'customer_home' %}">🏠 Home</a>
+        <a href="{% url 'browse_products' %}">🛒 Browse Products</a>
+        <a href="{% url 'my_orders' %}">📦 My Orders</a>
+        <a href="{% url 'profile' %}">👤 Profile</a>
+        <a href="{% url 'logout' %}">🚪 Logout</a>
+    </div>
+</header>
+
+<div class="container">
+
+    <h2>✅ Confirm Your Order</h2>
+
+    <div class="info">
+        <p><strong>Product:</strong> {{ order.product.product_name }}</p>
+        <p><strong>Farmer:</strong> {{ order.product.farmer }}</p>
+        <p><strong>Quantity:</strong> {{ order.quantity }}</p>
+    </div>
+
+    <div class="total">
+        Total Amount: ₹{{ order.total_amount }}
+    </div>
+
+    <div class="actions">
+        <a href="{% url 'razorpay_checkout' order.id %}" class="btn pay">💳 Pay Now</a>
+        <a href="{% url 'cod_confirm' order.id %}" class="btn cod">🚚 Cash on Pickup</a>
+    </div>
+
+    <a href="{% url 'customer_home' %}" class="back">← Back to Dashboard</a>
+
+</div>
+
+</body>
+</html>
