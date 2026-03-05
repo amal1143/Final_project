@@ -118,6 +118,8 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [BASE_DIR / "static"]
+STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
+
 
 import os
 SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', 'fallback-secret') 
