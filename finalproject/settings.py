@@ -25,7 +25,8 @@ SECRET_KEY = 'django-insecure-=k42$we^q$%a7+ee-u_a5h_n@g$lve8k%+j+)yul3ly0t0l2$s
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ['finalproject.onrender.com', 'localhost', '127.0.0.1']
+
 
 
 # Application definition
@@ -119,7 +120,9 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = [BASE_DIR / "static"]
 
 import os
-
+SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', 'fallback-secret') 
+DEBUG = False 
+ALLOWED_HOSTS = ['finalproject.onrender.com', 'localhost', '127.0.0.1']
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
